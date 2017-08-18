@@ -1,0 +1,103 @@
+<html>
+<head>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta charset="utf-8">
+    <title>PyPy.js - Button Demo</title>
+    <style>
+    button {
+        display:none;
+    }
+    pre {
+        width: 90%;
+        height: 20%;
+        margin: 1em;
+        padding: 1em;
+        border: 5px solid #ddd;
+        overflow: auto;
+    }
+    .canvas {
+        border: 1px solid blue;
+    }
+    .canvasdiv {
+        float: left;
+        margin-right: 5px;
+    }
+    .parentdiv {
+    }
+    .previewdiv {
+        border: 1px solid green;
+        float: left;
+    }
+    </style>
+</head>
+<body>
+    <h1>PyPy.js - Button Demo</h1>
+    <p>
+        Render Buttons with <a href="http://pypyjs.org">PyPy.js</a>
+    </p>
+    <a href="https://github.com/jedie/pypyjs-examples"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+    <noscript><h3>Please enable JavaScript for using PyPy.js</h3></noscript>
+    <div class="previewdiv"  style="width: 400; height: 400;">
+    </div>
+    <pre id="output"></pre>
+    <hr />
+    <p>
+        PyPy.js is an experiment in building a fast and compliant python environment for the web.
+    <br/>
+        It uses the <a href="http://pypy.org/">PyPy</a> python interpreter, compiled for the web via
+        <a href="http://emscripten.org">emscripten</a>, with a custom JIT backend that emits <a href="http://asmjs.org">asm.js</a>
+        code at runtime.
+    </p>
+</div>
+<script src="pypyjs-release/lib/Promise.min.js" type="text/javascript" charset="utf-8" onerror="JavaScript:alert('Error loading file ['+this.src+'] !');"></script>
+<script src="pypyjs-release/lib/FunctionPromise.js" type="text/javascript" charset="utf-8" onerror="JavaScript:alert('Error loading file ['+this.src+'] !');"></script>
+<script src="pypyjs-release/lib/pypyjs.js" type="text/javascript" charset="utf-8" onerror="JavaScript:alert('Error loading file ['+this.src+'] !');"></script>
+<script src="https://code.jquery.com/jquery-1.11.3.min.js" onerror="JavaScript:alert('Error loading file ['+this.src+'] !');"></script>
+<script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js" onerror="JavaScript:alert('Error loading file ['+this.src+'] !');"></script>
+<script type="text/javascript" charset="utf-8">
+try {
+    jQuery(document);
+} catch (e) {
+    alert("Error, jQuery JS not loaded!\n Original error was:" + e);
+}
+function console_exec(code) {
+    pypyjs.exec(code).then(function() {
+        console.log("OK");
+    }, function (err) {
+        // err is an instance of PyPyJS.Error
+        console.log("ERROR: "+err.name+": "+err.message+"!)");
+        pypyjs.stderr(err.trace); // the human-readable traceback, as a string
+    });
+}
+$(function () {
+    out = $("#output");
+    pypyjs.stdout = pypyjs.stderr = function(data) {
+        out.append(data);
+        out.scrollTop(out.prop("scrollHeight")); // scoll down
+    }
+    pypyjs.stdout.reset = pypyjs.stderr.reset = function(data) {
+        out.empty();
+    }
+
+    // Display a helpful message and twiddle thumbs as it loads.
+    pypyjs.stdout("Loading PyPy.js.\n\n");
+    pypyjs.stdout('It\'s big, so this might take a while...');
+    var pseudo_status = setInterval(function(){ pypyjs.stdout("."); }, 500);
+
+    pypyjs.ready().then(function() {
+        clearInterval(pseudo_status);
+        pypyjs.stdout.reset();
+
+        pypyjs.stdout("load 'cav_demo.py'...");
+        $.get( "cav_demo.py", function( data ) {
+            console_exec( data );
+        }).done(function() {
+            pypyjs.stdout("OK\n");
+        }).fail(function() {
+            pypyjs.stderr("error!");
+        });
+    });
+});
+</script>
+</body>
+</html>
