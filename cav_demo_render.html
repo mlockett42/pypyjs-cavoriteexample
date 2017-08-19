@@ -84,8 +84,8 @@ $(function () {
         clearInterval(pseudo_status);
         pypyjs.stdout.reset();
 
-        pypyjs.stdout("load 'cav_demo.py'...");
-        $.get( "cav_demo.py", function( data ) {
+        pypyjs.stdout("load 'cav_demo_render.py'...");
+        $.get( "cav_demo_render.py", function( data ) {
             console_exec( data );
         }).done(function() {
             pypyjs.stdout("OK\n");
