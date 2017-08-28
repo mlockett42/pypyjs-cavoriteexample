@@ -17,8 +17,7 @@ class ListItem(c):
     def handle_click(self, e):
         global data
         data.remove(self.value)
-        r = self.get_root()
-        r.mount_redraw()
+        self.get_root().mount_redraw()
 
 class ListDisplayer(c):
     def __init__(self):
@@ -26,8 +25,8 @@ class ListDisplayer(c):
 
     def get_children(self):
         global data
-        ret = [ListItem(self, v) for v in data]
-        return ret
+        return [ListItem(self, v) for v in data]
+
 
 def add_new(e):
     global data

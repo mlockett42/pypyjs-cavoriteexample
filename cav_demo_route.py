@@ -2,13 +2,9 @@ from __future__ import absolute_import, print_function
 import js
 from cavorite import c, t, Router
 
-jquery = js.globals["$"]
-
-preview_div = js.globals.document.body
+body = js.globals.document.body
 
 data = ["1", "2"]
-
-print("Dav demo route")
 
 class ListItem(c):
     def __init__(self, parent, value):
@@ -31,12 +27,6 @@ class ListDisplayer(c):
         ret = [ListItem(self, v) for v in data]
         return ret
 
-def add_new(e):
-    global data
-    data.append(str(len(data) + 1))
-    global content
-    content.mount_redraw()
-
 class Level(c):
     def __init__(self):
         super(Level, self).__init__("p")
@@ -45,9 +35,6 @@ class Level(c):
         return [t("Level = " + str(self.get_root().url_kwargs['level']))]
         
 
-#content = c("div", [c("h1", "Cavorite Mount Test"),
-#                    c("button", {"onclick": add_new}, "Press me"),
-#                    ListDisplayer()])
 level = c("div", [Level()])
 
 welcome_page = c("div", [c("p", "Welcome to cavorite"),
@@ -61,9 +48,8 @@ error_404_page = c("div", [c("p", "No match 404 error"),
 
 r = Router({r'^levels/(?P<level>[0-9]+)$': level,
             r'^$': welcome_page},
-            error_404_page, preview_div)
+            error_404_page, body)
 r.route()
-#content.mount(preview_div)
 
 
 
