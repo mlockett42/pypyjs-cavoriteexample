@@ -6,27 +6,6 @@ body = js.globals.document.body
 
 data = ["1", "2"]
 
-class ListItem(c):
-    def __init__(self, parent, value):
-        super(ListItem, self).__init__("p", [c("button", {"onclick": self.handle_click}, str(value))])
-        self.value = value
-        self.parent = parent
-
-    def handle_click(self, e):
-        global data
-        data.remove(self.value)
-        r = self.get_root()
-        r.mount_redraw()
-
-class ListDisplayer(c):
-    def __init__(self):
-        super(ListDisplayer, self).__init__("div")
-
-    def get_children(self):
-        global data
-        ret = [ListItem(self, v) for v in data]
-        return ret
-
 class Level(c):
     def __init__(self):
         super(Level, self).__init__("p")
