@@ -64,3 +64,9 @@ the relevant steps). Just upload the entire pypyjs-cavoriteexample directory and
 ## Licence
 Copyright Mark Lockett 2017 Apache 2.0 Licence
 
+## Why is it called cavorite?
+
+Cavorite was inspired by mithril.js
+
+So like mithril, cavorite is also a fictional metal. But cavorite has a great special power, antigravity!!
+
